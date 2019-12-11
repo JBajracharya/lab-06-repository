@@ -1,52 +1,49 @@
 'use strict';
 
-const PORT = process.env.PORT || 3000;
+const datas = [];
+
+//dependencies
+const PORT = process.env.PORT || 3050;
 const express = require('express');
 const cors = require('cors');
-
 const app = express();
-
 require('dotenv').config();
-
 app.use(cors());
 
-function Location (locName, lat, long) {
-    this.locName = locName;
+function Location (locName, formAddress, lat, long) {
+    this.search_query = locName;
+    this.formatted_address = formAddress 
     this.lat = lat;
     this.long = long;
 }
 
-
+const error = {
+    status: 'Error',
+    responseText: 'Sorry, something went wrong',
+}
 
 app.get('/location', (request, response) => {
     
     const geoData = require('./data/geo.json');
-    console.log(geoData);
-
-    const geoDataResult = geoData.results[0].address_components[0].long_name;
-    console.log(geoDataResult);
-
+    // console.log('1', geoData);
+    let query = request.query.data;
+    console.log('queryt', query)
+    const geoquery = geoData.results[0].address_components[0].long_name;
+    // console.log(geoDataResult);
     const geoFormattedQuery = geoData.results[0].formatted_address;
-    
-    const lat = geoData.results[0].geometry.location.lat;
+    let lat = geoData.results[0].geometry.location.lat;    
+    const lng = geoData.results[0].geometry.location.lng;
+    // console.log('la', lng);
+    debugger;
+    datas.push(new Location(geoquery, geoFormattedQuery, lat, lng));
+    console.log('dtas', datas[0]);
 
-    const long = geoData.results[0].geometry.location.lng;
+    if(query === datas[0].search_query) {
+      response.send(datas[0]);
+    } else {
+      response.send(error.responseText);
+    }
 
-    response.send(lat);
-
-    // response.send({location : {
-    //     'search_query': 'seattle',
-    //     'formatted_query': 'Seattle, WA, USA',
-    //     'latitude': '47.606210',
-    //     'longitude': '-122.332071'
-    //   } });
-
-
-    // response.send(getData);
-    // let testData = {msg: 'HELLO'};
-    
-    // response.send(location);
-    // const location = new Location('seattle','121212', '121211');
 })
 
 app.listen(PORT, () => {
