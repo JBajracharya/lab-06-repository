@@ -1,17 +1,17 @@
 # lab-06-repository
 
-Number and name of feature: ________________________________
+Number and name of feature: _____3. Weather___________________________
 
-Estimate of time needed to complete: _____
+Estimate of time needed to complete: _2 hours____
 
-Start time: _____
+Start time: _09:00____
 
-Finish time: _____
+Finish time: ___12:00__
 
 # Project Name
 
-**Author**: Your Name Goes Here
-**Version**: 1.0.0 (increment the patch/fix version number if you make more commits past your first submission)
+**Author**: Jitendra Bajracharya/Yihang Zheng
+**Version**: 1.0.3 (increment the patch/fix version number if you make more commits past your first submission)
 
 ## Overview
 <!-- Provide a high level overview of what this application is and why you are building it, beyond the fact that it's an assignment for this class. (i.e. What's your problem domain?) -->
