@@ -3,13 +3,14 @@
 const datas = [];
 
 //dependencies
-const PORT = process.env.PORT || 3040;
+const PORT = process.env.PORT || 3000;
 const express = require('express');
 const cors = require('cors');
 const app = express();
 require('dotenv').config();
 app.use(cors());
 
+//creating constructor function for location
 function Location (locName, formAddress, lat, long) {
     this.search_query = locName;
     this.formatted_address = formAddress 
@@ -17,17 +18,17 @@ function Location (locName, formAddress, lat, long) {
     this.longitude = long;
 }
 
-const error = {
-    status: 'Error',
-    responseText: 'Sorry, something went wrong',
-}
+//handling errors. 
+app.get('/', function(request, response){
+  response.status(500).send('Sorry, something went wrong');
+})
 
-app.get('/location', (request, response) => {
-    
+//making jason call to get the data and respond to user request with data
+app.get('/location', (request, response) => {    
     const geoData = require('./data/geo.json');
     // console.log('1', geoData);
     let query = request.query.data;
-    // console.log('queryt', query)
+    console.log('queryt', query);
     const geoquery = geoData.results[0].address_components[0].long_name;
     // console.log(geoDataResult);
     const geoFormattedQuery = geoData.results[0].formatted_address;
@@ -35,9 +36,12 @@ app.get('/location', (request, response) => {
     const lng = geoData.results[0].geometry.location.lng;
     // console.log('la', lng);
     datas.push(new Location(geoquery, geoFormattedQuery, lat, lng));
-
+    if(query.search_query !== datas[0].search_query.toLowerCase()) {
       response.send(datas[0]);
-      console.log('no');
+      console.log('datas', datas);
+    } else {
+      response.send(new Error('Sorry, cannot retrieve data.'));
+    }
 })
 
 function Forecast(forecast, time) {
@@ -57,7 +61,7 @@ app.get('/weather', (request, response) => {
   response.send(queryResult);
   
 })
-
+// format the date to display on the front end.
 function getDate (time) {
   const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat'];
   const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
